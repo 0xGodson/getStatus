@@ -1,5 +1,5 @@
-sudo pip3 install asyncio
-sudo pip3 install aiohttp
-sudo pip3 install os
-sudo pip3 install sys
-sudo pip3 install time
+pip3 install asyncio
+pip3 install aiohttp
+pip3 install os
+pip3 install sys
+pip3 install time
