@@ -1,0 +1,70 @@
+#!/usr/bin/python3
+import asyncio
+import aiohttp
+import os
+import time
+from sys import argv
+
+start_time = time.time()
+    
+try:
+    urls = []
+    results = []
+
+    def create_files(dirname):
+        global names
+        names = ["200.txt", "201.txt","301.txt", "302.txt" ,"400.txt","401.txt", "403.txt", "404.txt", "405.txt", "406.txt", "500.txt"]
+        os.system(f'mkdir {dirname}')
+        for name in names:
+            os.system(f'touch {dirname}/{name}')
+
+    def check_status(url, code):
+        
+        if code == 200:
+            os.system(f'echo {url} >> {argv[1]}/200.txt')        
+        elif code == 201:
+            os.system(f'echo {url} >> {argv[1]}/201.txt')        
+        elif code == 301:
+            os.system(f'echo {url} >> {argv[1]}/301.txt')                
+        elif code == 302:
+            os.system(f'echo {url} >> {argv[1]}/302.txt')     
+        elif code == 400:
+            os.system(f'echo {url} >> {argv[1]}/400.txt') 
+        elif code == 401:
+            os.system(f'echo {url} >> {argv[1]}/401.txt')
+        elif code == 403:
+            os.system(f'echo {url} >> {argv[1]}/403.txt') 
+        elif code == 404:
+            os.system(f'echo {url} >> {argv[1]}/404.txt') 
+        elif code == 405:
+            os.system(f'echo {url} >> {argv[1]}/405.txt')    
+        elif code == 406:
+            os.system(f'echo {url} >> {argv[1]}/406.txt')   
+        elif code == 500:
+            os.system(f'echo {url} >> {argv[1]}/500.txt')    
+        else:
+            os.system(f'echo {url} >> {argv[1]}/500.txt')                                                                             
+    
+    create_files(argv[1])
+
+    with open(f"{argv[2]}", "r") as f:
+        for url in f:
+            url = url.strip()
+            urls.append(url)
+
+    async def send_req():
+        async with aiohttp.ClientSession() as session:
+            for url in urls:
+                res = await session.get(url, allow_redirects=False, ssl=False)
+                status_code = res.status
+                print(f'{url}, {status_code}')
+                check_status(url, status_code)
+                
+                
+    asyncio.run(send_req())
+
+    print("--- %s seconds ---" % (time.time() - start_time))
+
+except IndexError as e:
+    print(f"Usage: {argv[0]} <Project_Name> <Url_list>")
+    print(f"Example: {argv[0]} google subdomains.txt")
