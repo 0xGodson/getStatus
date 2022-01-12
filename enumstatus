@@ -59,9 +59,12 @@ try:
                 status_code = res.status
                 print(f'{url}, {status_code}')
                 check_status(url, status_code)
+
+    async def task_handel():
+        task = asyncio.create_task(send_req())
+        await task
                 
-                
-    asyncio.run(send_req())
+    asyncio.run(task_handel())
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
