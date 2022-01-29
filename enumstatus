@@ -1,73 +1,35 @@
 #!/usr/bin/python3
-import asyncio
-import aiohttp
+import concurrent.futures
 import os
 import time
+import requests
 from sys import argv
+from urllib3.exceptions import InsecureRequestWarning
 
+requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 start_time = time.time()
-    
+
 try:
+    filename = argv[1]
     urls = []
-    results = []
 
-    def create_files(dirname):
-        global names
-        names = ["200.txt", "201.txt","301.txt", "302.txt" ,"400.txt","401.txt", "403.txt", "404.txt", "405.txt", "406.txt", "500.txt"]
-        os.system(f'mkdir {dirname}')
-        for name in names:
-            os.system(f'touch {dirname}/{name}')
+    def appendUrl(filename):
+        with open(filename, 'r') as f:
+            for url in f:
+                url = url.strip()
+                urls.append(url)
+            
+    appendUrl(filename)
 
-    def check_status(url, code):
-        
-        if code == 200:
-            os.system(f'echo {url} >> {argv[1]}/200.txt')        
-        elif code == 201:
-            os.system(f'echo {url} >> {argv[1]}/201.txt')        
-        elif code == 301:
-            os.system(f'echo {url} >> {argv[1]}/301.txt')                
-        elif code == 302:
-            os.system(f'echo {url} >> {argv[1]}/302.txt')     
-        elif code == 400:
-            os.system(f'echo {url} >> {argv[1]}/400.txt') 
-        elif code == 401:
-            os.system(f'echo {url} >> {argv[1]}/401.txt')
-        elif code == 403:
-            os.system(f'echo {url} >> {argv[1]}/403.txt') 
-        elif code == 404:
-            os.system(f'echo {url} >> {argv[1]}/404.txt') 
-        elif code == 405:
-            os.system(f'echo {url} >> {argv[1]}/405.txt')    
-        elif code == 406:
-            os.system(f'echo {url} >> {argv[1]}/406.txt')   
-        elif code == 500:
-            os.system(f'echo {url} >> {argv[1]}/500.txt')    
-        else:
-            os.system(f'echo {url} >> {argv[1]}/500.txt')                                                                             
-    
-    create_files(argv[1])
 
-    with open(f"{argv[2]}", "r") as f:
-        for url in f:
-            url = url.strip()
-            urls.append(url)
+    def getStatus(url):
+        r = requests.get(url, allow_redirects=False, timeout=3, verify=False)
+        print(f'{url} [{r.status_code}]')
 
-    async def send_req():
-        async with aiohttp.ClientSession() as session:
-            for url in urls:
-                res = await session.get(url, allow_redirects=False, ssl=False)
-                status_code = res.status
-                print(f'{url}, {status_code}')
-                check_status(url, status_code)
 
-    async def task_handel():
-        task = asyncio.create_task(send_req())
-        await task
-                
-    asyncio.run(task_handel())
-
-    print("--- %s seconds ---" % (time.time() - start_time))
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+            executor.map(getStatus, urls)    
 
 except IndexError as e:
-    print(f"Usage: {argv[0]} <Project_Name> <Url_list>")
-    print(f"Example: {argv[0]} google subdomains.txt")
+    print('Usage:')
+    print(f'{argv[0]} <urls.txt>')
