@@ -10,8 +10,19 @@
 
 ## Usage:
 
-    ./getStatus <project_name> <list_of_urls>
+    ./getStatus <list_of_urls>
 
 ## Example:
  
-    ./getStatus google urls.txt
+    ./getStatus urls.txt 
+    
+## To save the Output
+
+    ./getStatus urls.txt > status.txt
+    
+
+## Example Output:
+
+    <img src="https://i.imgur.com/V5FyJwM.png">
+    
+    
