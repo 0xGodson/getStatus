@@ -1,6 +1,6 @@
-# Enum_Status
+# getStatus
 
-    A python tool to get status and store the list of urls with the same status code. 
+    A python tool (async) to get Status and display
     
  ## Install 
  
@@ -25,4 +25,7 @@
 
 <img src="https://i.imgur.com/V5FyJwM.png">
     
+## Filter the status codes
+
+You can use <a href='https://github.com/0xGodson/filterStatus/'>this</a> tool to filter the status code and Save the list of urls have same status codes
     
