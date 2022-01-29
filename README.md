@@ -23,6 +23,6 @@
 
 ## Example Output:
 
-    <img src="https://i.imgur.com/V5FyJwM.png">
+<img src="https://i.imgur.com/V5FyJwM.png">
     
     
