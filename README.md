@@ -4,15 +4,14 @@
     
  ## Install 
  
-    git clone https://github.com/0xGodson/Enum_Status
-    cd Enum_Status
-    chmod +x install.sh
-    ./install.sh
+    git clone https://github.com/0xGodson/getStatus
+    cd getStatus
+
 
 ## Usage:
 
-    ./emumstatus <project_name> <list_of_urls>
+    ./getStatus <project_name> <list_of_urls>
 
 ## Example:
  
-    ./enumstatus google urls.txt
+    ./getStatus google urls.txt
